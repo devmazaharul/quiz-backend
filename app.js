@@ -1,20 +1,20 @@
 const express=require("express")
 const app=express()
 require("./config/Db")
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({extended:true}))
 app.use(express.json())
+
 const cors=require("cors")
-
-const user_router=require("./route/userRoute")
-app.use(user_router)
-
 
 
 app.use(cors())
 
-app.get("/user",(req,res)=>{
-    return res.json("hellow world")
-})
+
+const {userRoute}=require("./route/userRoute")
+app.use(userRoute)
+
+
+
 app.get("/",(req,res)=>{
      res.json("hellow world")
 })

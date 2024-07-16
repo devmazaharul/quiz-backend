@@ -7,7 +7,7 @@ const dbCon=async()=>{
         })
     } catch (error) {
         console.log("db not connected")
-        process.exit(1)
+        // process.exit(1)
     }
 }
 
