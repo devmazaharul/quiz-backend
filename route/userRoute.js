@@ -119,4 +119,24 @@ userRoute.post("/api/add-quiz",async(req,res)=>{
 })
 
 
+userRoute.post("/deletequiz",async(req,res)=>{
+  try {
+    const {quizid}=req.body;
+    const findQuizmodel=await QuizModel.findOne({quizId:quizid})
+    if(findQuizmodel){
+      const dltQuery=await QuizModel.deleteOne({quizId:quizid})
+      if(dltQuery){
+        return res.status(200).json({message:"Successfully delete quiz "})
+      }else{
+        return res.status(201).json({message:"Faild to delete quiz "})
+      }
+    }else{
+      return res.status(202).json({message:"No quiz fount "})
+    }
+  } catch (error) {
+    return res.status(500).json({message:"server error"})
+  }
+})
+
+
 module.exports = { userRoute };
