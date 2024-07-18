@@ -9,11 +9,15 @@ const certificateSchima=new mongoose.Schema({
         type:String,
         require:true
     },
-    courcesTile:{
+    candidateNumber:{
         type:String,
         require:true
     },
-    courcesDesc:{
+    candidateGrade:{
+        type:String,
+        require:true
+    },
+    candidateTitle:{
         type:String,
         require:true
     },

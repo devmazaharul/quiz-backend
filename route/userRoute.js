@@ -3,6 +3,7 @@ const { QuizModel } = require("../model/Quizmodel");
 const {Adminlogimodel}=require("../model/AdminModel")
 const randomString=require('randomstring')
 const { sendEmail } = require("../config/Mailer");
+const { certificateModel } = require("../model/certificateModel");
 
 userRoute.get("/allquiz", async(req,res)=>{
     try {
@@ -139,4 +140,73 @@ userRoute.post("/deletequiz",async(req,res)=>{
 })
 
 
+userRoute.post("/genaratecertificate",async(req,res)=>{
+  try {
+    const {info}=req.body
+    const {candidateName,candidateNumber,candidateGrade,candidateTitle}=info
+
+
+    if(info.candidateName!=="" && info.candidateNumber!=="" && info.candidateGrade!=="" && info.candidateTitle!==""){
+      const findCertificate=await certificateModel.findOne({candidateNumber:info.candidateNumber})
+      if(!findCertificate){
+        const candirateId=randomString.generate({length:5,charset:"numeric"})
+        const insertCertificateInfo=new certificateModel({
+
+          crId:candirateId,
+          candidateName,
+          candidateNumber,
+          candidateGrade,
+          candidateTitle,
+          genarateDate:new Date().toLocaleDateString()+" - " + new Date().toLocaleTimeString()
+        })
+
+        const saveQ=await insertCertificateInfo.save()
+        if(saveQ){
+         
+          return res.status(200).json({message:"Successfully Genarate certificate"})
+        }else{
+          return res.status(201).json({message:"Faild to Genarate certificate"})
+        }
+      }else{
+        return res.status(202).json({message:"Already have a Certificate this number"})
+      }
+    }else{
+      return res.status(203).json({message:"Empty boxes "})
+    }
+  } catch (error) {
+    return res.status(500).json({message:"Server error"})
+  }
+})
+
+
+userRoute.get("/getcertificates",async(req,res)=>{
+  try {
+    const getCertificates=await certificateModel.find()
+    if(getCertificates.length>0){
+      return res.status(200).json({info:getCertificates})
+    }else{
+      return res.status(201).json({message:"Faild",data:null})
+    }
+  } catch (error) {
+    return res.status(500).json({message:"Server error"})
+  }
+})
+
+userRoute.post("/getcertificate",async(req,res)=>{
+  try {
+    const {id}=req.body;
+
+    const singleCertificate=await certificateModel.findOne({crId:id})
+    if(singleCertificate){
+      return res.status(200).json({message:"Successfully get certificate",data:singleCertificate})
+    }else{
+      return res.status(201).json({message:"Faild to get certificate "})
+    }
+  
+  } catch (error) {
+    return res.status(500).json({message:"Server error"})
+  }
+})
+
 module.exports = { userRoute };
+ 
