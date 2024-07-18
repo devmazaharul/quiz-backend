@@ -49,7 +49,7 @@ userRoute.post("/api/verifyadmin", async (req, res) => {
        
         await findAdmin.save();
         const mailBody = `Your confirmation code is ${genarateCode} to login your dashboard.`;
-        await sendEmail(email, "Confirmation code"+genarateCode, mailBody);
+        await sendEmail(email, genarateCode+"-"+"Your confirmation code", mailBody);
         return res.status(200).json({ message: "Successfully send email"});
       } else {
         return res.status(201).json({ message: "Faild to send email" });
