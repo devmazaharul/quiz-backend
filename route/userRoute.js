@@ -146,7 +146,7 @@ userRoute.post("/genaratecertificate",async(req,res)=>{
     const {candidateName,candidateNumber,candidateGrade,candidateTitle}=info
 
 
-    if(info.candidateName!=="" && info.candidateNumber!=="" && info.candidateGrade!=="" && info.candidateTitle!==""){
+    if(info.candidateName!=="" && info.candidateNumber.length==11 && info.candidateNumber!=="" && info.candidateGrade!=="" && info.candidateTitle!==""){
       const findCertificate=await certificateModel.findOne({candidateNumber:info.candidateNumber})
       if(!findCertificate){
         const candirateId=randomString.generate({length:5,charset:"numeric"})
@@ -171,7 +171,7 @@ userRoute.post("/genaratecertificate",async(req,res)=>{
         return res.status(202).json({message:"Already have a Certificate this number"})
       }
     }else{
-      return res.status(203).json({message:"Empty boxes "})
+      return res.status(203).json({message:"Empty boxes or Number must be 11 digit "})
     }
   } catch (error) {
     return res.status(500).json({message:"Server error"})
