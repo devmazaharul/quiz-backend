@@ -80,7 +80,7 @@ userRoute.post("/api/verifyadmincode",async(req,res)=>{
             return res.status(201).json({message:"Faild "})
         }
      }else{
-        return res.status(202).json({message:"OTP musb be 5 digit "})
+        return res.status(202).json({message:"OTP must be 5 digit "})
      }
 
         
