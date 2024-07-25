@@ -4,6 +4,7 @@ const {Adminlogimodel}=require("../model/AdminModel")
 const randomString=require('randomstring')
 const { sendEmail } = require("../config/Mailer");
 const { certificateModel } = require("../model/certificateModel");
+const { SignupModel } = require("../model/Signupmodel");
 
 userRoute.get("/allquiz", async(req,res)=>{
     try {
@@ -205,6 +206,42 @@ userRoute.post("/getcertificate",async(req,res)=>{
   
   } catch (error) {
     return res.status(500).json({message:"Server error"})
+  }
+})
+
+userRoute.post("/signup",async(req,res)=>{
+try {
+  const {data}=req.body
+  const {name,number}=data
+  const genId=randomString.generate({length:6,charset:"numeric"})
+  const insertQuery=new SignupModel({
+    userID:genId,
+    userName:name,
+    userNumber:number,
+    signupDate:new Date().toLocaleDateString()+"-"+new Date().toLocaleTimeString()
+  })
+  const saveQuery=await insertQuery.save()
+  if(saveQuery){
+
+    return res.status(200).json({message:"Success"})
+  }else{
+    return res.status(201).json({message:"faild"})
+  }
+} catch (error) {
+  return res.status(500).json({message:"Server error"})
+}
+})
+
+userRoute.get("/getcandidates",async(req,res)=>{
+  try {
+    const getquery=await SignupModel.find()
+    if(getquery.length>0){
+      return res.status(200).json({message:"susccess",data:getquery})
+    }else{
+      return res.status(201).json({message:"no data found",data:""})
+    }
+  } catch (error) {
+    return res.status(500).json({message:"server error"})
   }
 })
 
