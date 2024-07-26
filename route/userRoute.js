@@ -214,11 +214,12 @@ try {
   const {data}=req.body
   const {name,number}=data
   const genId=randomString.generate({length:6,charset:"numeric"})
+  const dateMake=new Date().toLocaleTimeString()+" - "+new Date().toLocaleDateString()
   const insertQuery=new SignupModel({
     userID:genId,
     userName:name,
     userNumber:number,
-    signupDate:new Date().toLocaleDateString()+"-"+new Date().toLocaleTimeString()
+    signupDate:dateMake
   })
   const saveQuery=await insertQuery.save()
   if(saveQuery){
